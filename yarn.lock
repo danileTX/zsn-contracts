@@ -659,6 +659,11 @@
     "@nomicfoundation/solidity-analyzer-linux-x64-musl" "0.1.2"
     "@nomicfoundation/solidity-analyzer-win32-x64-msvc" "0.1.2"
 
+"@openzeppelin/contracts@^3.4.1":
+  version "3.4.2"
+  resolved "https://registry.yarnpkg.com/@openzeppelin/contracts/-/contracts-3.4.2.tgz#d81f786fda2871d1eb8a8c5a73e455753ba53527"
+  integrity sha512-z0zMCjyhhp4y7XKAcDAi3Vgms4T2PstwBdahiO0+9NaGICQKjynK3wduSRplTgk4LXmoO1yfDGO5RbjKYxtuxA==
+
 "@scure/base@~1.1.0", "@scure/base@~1.1.6":
   version "1.1.9"
   resolved "https://registry.yarnpkg.com/@scure/base/-/base-1.1.9.tgz#e5e142fbbfe251091f9c5f1dd4c834ac04c3dbd1"
