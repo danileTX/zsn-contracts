@@ -24,7 +24,7 @@ async function main() {
     // test airdrop
     tx = await Air.withdrawTokens();
     await tx.wait();
-    // get airdrop balance of c2n token
-    const balanceAfter = await c2nToken.balanceOf(Air.address);
+    // get airdrop balance of zsn token
+    const balanceAfter = await zsnToken.balanceOf(Air.address);
     console.log("Airdrop balance of ZSN token after withdrawTokens: ", ethers.utils.formatEther(balanceAfter));
 }

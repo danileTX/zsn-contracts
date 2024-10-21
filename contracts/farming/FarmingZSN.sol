@@ -7,7 +7,7 @@ import "@openzeppelin/contracts/math/SafeMath.sol";
 import "@openzeppelin/contracts/access/Ownable.sol";
 
 contract FarmingZSN is Ownable {
-    using safemath for uint256;
+    using SafeMath for uint256;
     using SafeERC20 for IERC20;
 
     struct UserInfo {
@@ -39,7 +39,7 @@ contract FarmingZSN is Ownable {
     event Withdraw(address indexed user, uint256 indexed pid, uint256 amount);
     event EmergencyWithdraw(address indexed user, uint256 indexed pid, uint256 amount);
 
-    constructor(IERC20 _ERC20, uint256 _rewardPerSecond, uint256 _startTimestamp) public {
+    constructor(IERC20 _erc20, uint256 _rewardPerSecond, uint256 _startTimestamp) public {
         erc20 = _erc20;
         rewardPerSecond = _rewardPerSecond;
         startTimestamp = _startTimestamp;
@@ -70,10 +70,10 @@ contract FarmingZSN is Ownable {
             lastRewardTimestamp: lastRewardTimestamp,
             accERC20PerShare : 0,
             totalDeposits: 0
-        }))
+        }));
     }
 
-    function set(uint256 _pid, uint256 _allocPoint, bool _withUpdate) public onlyOnwer {
+    function set(uint256 _pid, uint256 _allocPoint, bool _withUpdate) public onlyOwner {
         if(_withUpdate) {
             massUpdatePools();
         }
@@ -94,11 +94,11 @@ contract FarmingZSN is Ownable {
 
         uint256 lpSupply = pool.totalDeposits;
 
-        if(block.timeStamp > pool.lastRewardTimestamp && lpSupply != 0) {
+        if(block.timestamp > pool.lastRewardTimestamp && lpSupply != 0) {
             uint256 lastTimestamp = block.timestamp < endTimestamp ? block.timestamp : endTimestamp;
             uint256 timestampToCompare = pool.lastRewardTimestamp < endTimestamp ? pool.lastRewardTimestamp : endTimestamp;
             uint256 nrOfSeconds = lastTimestamp.sub(timestampToCompare);
-            uint256 erc20Rward = nrOfSeconds.mul(rewardPerSecond).mul(pool.allocPoint).div(totalAllocPoint);
+            uint256 erc20Reward = nrOfSeconds.mul(rewardPerSecond).mul(pool.allocPoint).div(totalAllocPoint);
 
             accERC20PerShare = accERC20PerShare.add(erc20Reward.mul(1e36).div(lpSupply));
         }
@@ -111,6 +111,7 @@ contract FarmingZSN is Ownable {
         }
 
         uint256 lastTimestamp = block.timestamp < endTimestamp ? block.timestamp : endTimestamp;
+        return rewardPerSecond.mul(lastTimestamp - startTimestamp).sub(paidOut);
     }
 
     function massUpdatePools() public {
