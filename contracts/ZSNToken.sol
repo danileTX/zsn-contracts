@@ -16,19 +16,30 @@ contract ZSNtoken is Context, IERC20 {
     string private _symbol;
     uint8 private _decimals;
 
-    constructor(string memory name_,string memory symbol_,uint256 _totalSupply,uint8 decimals_) public {
-        _name = naem_;
+    constructor(
+        string memory name_,
+        string memory symbol_,
+        uint256 totalSupply_,
+        uint8 decimals_
+    ) public {
+        _name = name_;
         _symbol = symbol_;
         _decimals = decimals_;
-        _mint(_msgSender(), totalSupply);
+        _mint(_msgSender(), totalSupply_);
     }
 
-    function transfer(address recipient, uint256 amount) public virtual override returns (bool) {
-        _transfer(_msgSender(), spender amount);
+    function transfer(
+        address recipient,
+        uint256 amount
+    ) public virtual override returns (bool) {
+        _transfer(_msgSender(), recipient, amount);
         return true;
     }
 
-    function approve(address spender,uint256 amount) public virtual override returns (bool) {
+    function approve(
+        address spender,
+        uint256 amount
+    ) public virtual override returns (bool) {
         _approve(_msgSender(), spender, amount);
         return true;
     }
@@ -37,22 +48,50 @@ contract ZSNtoken is Context, IERC20 {
         _burn(_msgSender(), amount);
     }
 
-    function transferFrom(address sender, address recipient,uint256 amount) public virtual override returns (bool) {
-        _transfer(sender,recipient,amount);
-        _approve(sender, _msgSender(), _allowances[sender][_msgSender()].sub(amount, "ERC20: decreased allowance below zero"));
+    function transferFrom(
+        address sender,
+        address recipient,
+        uint256 amount
+    ) public virtual override returns (bool) {
+        _transfer(sender, recipient, amount);
+        _approve(
+            sender,
+            _msgSender(),
+            _allowances[sender][_msgSender()].sub(
+                amount,
+                "ERC20: decreased allowance below zero"
+            )
+        );
         return true;
     }
 
-    function decreaseAllowance(address spender, uint256 subtractedValue) public virtual returns (bool){
-        _approve(_msgSender(), spender, _allowances[msgSender()][spender].sub(subtractedValue, "ERC20: decrased allowance below zero"));
+    function decreaseAllowance(
+        address spender,
+        uint256 subtractedValue
+    ) public virtual returns (bool) {
+        _approve(
+            _msgSender(),
+            spender,
+            _allowances[_msgSender()][spender].sub(
+                subtractedValue,
+                "ERC20: decrased allowance below zero"
+            )
+        );
         return true;
     }
 
-    function _transfer(address sender, address recipient, uint256 amount) interval virtual {
-        require(sender != address(0, "ERC20: transfer from the zero address"));
+    function _transfer(
+        address sender,
+        address recipient,
+        uint256 amount
+    ) internal virtual {
+        require(sender != address(0), "ERC20: transfer from the zero address");
         require(recipient != address(0), "ERC20: transfer to the zero address");
 
-        _balances[sender] = _balances[sender].sub(amount, "ERC20: transfer amount exceeds balance");
+        _balances[sender] = _balances[sender].sub(
+            amount,
+            "ERC20: transfer amount exceeds balance"
+        );
         _balances[recipient] = _balances[recipient].add(amount);
         emit Transfer(sender, recipient, amount);
     }
@@ -63,23 +102,30 @@ contract ZSNtoken is Context, IERC20 {
         _totalSupply = _totalSupply.add(amount);
         _balances[account] = _balances[account].add(amount);
 
-        emit Transfer(account, address(0),amount);
+        emit Transfer(account, address(0), amount);
     }
 
     function _burn(address account, uint256 amount) internal virtual {
         require(account != address(0), "ERC20: burn from the zero address");
-        _balances[account] = _balances[account].sub(amount, "ERC20: burn amount exceeds balance");
+        _balances[account] = _balances[account].sub(
+            amount,
+            "ERC20: burn amount exceeds balance"
+        );
         _totalSupply = _totalSupply.sub(amount);
 
         emit Transfer(account, address(0), amount);
     }
 
-    function _approve(address owner, address spender, uint256 amount) internal virtual  {
+    function _approve(
+        address owner,
+        address spender,
+        uint256 amount
+    ) internal virtual {
         require(owner != address(0), "ERC20: approve from the zero address");
         require(spender != address(0), "ERC20: approve to the zero address");
 
         _allowances[owner][spender] = amount;
-        emit approve(owner, spender, amount);
+        emit Approval(owner, spender, amount);
     }
 
     function _setupDecimals(uint8 decimals_) internal virtual {
@@ -90,7 +136,10 @@ contract ZSNtoken is Context, IERC20 {
         return _name;
     }
 
-    function allowance(address owner, address spender) public view virtual override returns (uint256) {
+    function allowance(
+        address owner,
+        address spender
+    ) public view virtual override returns (uint256) {
         return _allowances[owner][spender];
     }
 
@@ -106,7 +155,9 @@ contract ZSNtoken is Context, IERC20 {
         return _totalSupply;
     }
 
-    function balanceOf(address account) public view virtual override returns (uint256) {
+    function balanceOf(
+        address account
+    ) public view virtual override returns (uint256) {
         return _balances[account];
     }
 }

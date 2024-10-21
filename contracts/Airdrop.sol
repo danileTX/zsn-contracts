@@ -20,10 +20,10 @@ contract Airdrop {
     constructor(address _airdropToken) public {
         require(_airdropToken != address(0));
 
-        airdropToken = IERC20(_airdropToken)
+        airdropToken = IERC20(_airdropToken);
     }
 
-    function withdrawTokens() public () {
+    function withdrawTokens() public {
         require(msg.sender == tx.origin, "require that message sender is tx-origin");
 
         address beneficiary = msg.sender;
