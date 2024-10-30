@@ -1,5 +1,5 @@
 const hre = require("hardhat");
-const {} = require("../utils");
+const {saveContractAddress, getSavedContractAddresses} = require("../utils");
 
 async function main() {
     // get zsn token address from contract address file

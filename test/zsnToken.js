@@ -7,7 +7,10 @@ const TOTAL_SUPPLY = 100000000;
 const NAME = "ZSN Token";
 const SYMBOL = "ZSN";
 const ZERO_ADDRESS = "0x0000000000000000000000000000000000000000";
+console.log(TOTAL_SUPPLY.toString(), "ttsupply");
+
 const INITIAL_SUPPLY = ethers.utils.parseEther(TOTAL_SUPPLY.toString());
+console.log(INITIAL_SUPPLY, "INITIAL_SUPPLY");
 const transferAmount = ethers.utils.parseEther("10");
 const unitTokenAmount = ethers.utils.parseEther("1");
 
@@ -40,18 +43,23 @@ async function isEthException(promise) {
 }
 
 async function setupContractAndAccounts() {
-    let accounts = await ethers.getSigners();
-    owner = accounts[0];
-    ownerAddr = await owner.getAddress();
-    anotherAccount = accounts[1];
-    anotherAccountAddr = await anotherAccount.getAddress();
-    recipient = accounts[2];
-    recipientAddr = await recipient.getAddress();
+    try {
+        let accounts = await ethers.getSigners();
+        owner = accounts[0];
+        ownerAddr = await owner.getAddress();
+        anotherAccount = accounts[1];
+        anotherAccountAddr = await anotherAccount.getAddress();
+        recipient = accounts[2];
+        recipientAddr = await recipient.getAddress();
 
-    const BreTokenFactory = await hre.ethers.getContractFactory("ZSNToken");
-    breToken = await BreTokenFactory.deploy(NAME, SYMBOL, INITIAL_SUPPLY, 18);
-    await breToken.deployed();
-    breToken = breToken.connect(owner);
+        const BreTokenFactory = await hre.ethers.getContractFactory("ZSNToken");
+        breToken = await BreTokenFactory.deploy(NAME, SYMBOL, INITIAL_SUPPLY, 18);
+        await breToken.deployed();
+        breToken = breToken.connect(owner);
+    } catch (error) {
+        console.error("Error deploying BREToken contract:", error);
+        throw error; // 重新抛出错误，以便测试框架能够捕获
+    }
 }
 
 describe("breToken:ERC20", () => {

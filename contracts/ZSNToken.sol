@@ -5,7 +5,7 @@ import "./math/SafeMath.sol";
 import "./utils/Context.sol";
 import "./IERC20.sol";
 
-contract ZSNtoken is Context, IERC20 {
+contract ZSNToken is Context, IERC20 {
     using SafeMath for uint256;
     mapping(address => uint256) private _balances;
     mapping(address => mapping(address => uint256)) private _allowances;
